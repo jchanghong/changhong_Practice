@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              style="@style/activitybackap"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <GridView android:layout_width="fill_parent"
+              android:numColumns="2"
+              android:horizontalSpacing="4dp"
+              android:verticalSpacing="4dp"
+              android:id="@+id/homegrid"
+              android:layout_height="fill_parent">
+
+              </GridView>
+
+</LinearLayout>

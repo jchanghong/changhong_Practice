@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                style="@style/activitybackap"
+        >
+    <changhong_Practice.ui.mychtrol.StickyGridHeadersGridView
+            android:background="#ffffff"
+            android:id="@+id/gridview"
+            android:layout_alignParentLeft="true"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:horizontalSpacing="0dip"
+            android:numColumns="3"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="0dip"
+            />
+
+</RelativeLayout>
+
+

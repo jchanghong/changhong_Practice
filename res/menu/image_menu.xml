@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+            android:id="@+id/delete"
+            android:icon="@android:drawable/ic_menu_delete"
+            app:showAsAction="always"
+            android:title="删除"/>
+    <item
+            android:id="@+id/share"
+            app:showAsAction="always"
+            android:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+            android:icon="@android:drawable/ic_menu_share"
+            android:title="分享"/>
+
+    <item
+            android:id="@+id/crop"
+            app:showAsAction="always"
+            android:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+            android:icon="@android:drawable/ic_menu_crop"
+            android:title="截图"/>
+    <item
+            android:id="@+id/setwallpapper"
+            app:showAsAction="always"
+            android:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+            android:title="设为壁纸"/>
+
+</menu>

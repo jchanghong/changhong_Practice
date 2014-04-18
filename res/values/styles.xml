@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ProgressBarStyle"
+           parent="@android:style/Widget.ProgressBar.Horizontal"/>
+     <style name="activitybackap" >
+         <item name="android:background">#ff36fff0</item>
+     </style>
+    <style name="setbutton" >
+        <item name="android:background">#ffffef68</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">#0000ff</item>
+    </style>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/appcompat/appcompat.iml" filepath="$PROJECT_DIR$/appcompat/appcompat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/changhong_Practice.iml" filepath="$PROJECT_DIR$/changhong_Practice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cropper/cropper.iml" filepath="$PROJECT_DIR$/cropper/cropper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cropper-master/cropper/cropper.iml" filepath="$PROJECT_DIR$/cropper-master/cropper/cropper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PhotoView/library/library.iml" filepath="$PROJECT_DIR$/PhotoView/library/library.iml" />
+    </modules>
+  </component>
+</project>
+

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_gravity="bottom"
+              style="@style/activitybackap"
+              android:padding="24dp"
+              android:orientation="vertical"
+              android:layout_height="match_parent">
+
+    <Button
+            style="@style/setbutton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="清理内存缓存"
+            android:id="@+id/buttonmemory" android:layout_gravity="center_horizontal"/>
+    <Button
+            style="@style/setbutton"
+            android:layout_width="300dp"
+            android:layout_marginTop="24dp"
+            android:layout_height="wrap_content"
+            android:text="清理外部缓存"
+            android:id="@+id/disccache" android:layout_gravity="center_horizontal"/>
+    <Button
+            style="@style/setbutton"
+            android:layout_width="300dp"
+            android:layout_marginTop="24dp"
+            android:layout_height="wrap_content"
+            android:text="设置包含文件夹"
+            android:id="@+id/files" android:layout_gravity="center_horizontal"/>
+    <Button
+            style="@style/setbutton"
+            android:layout_width="300dp"
+            android:layout_marginTop="24dp"
+            android:layout_height="wrap_content"
+            android:text="更多"
+            android:id="@+id/more" android:layout_gravity="center_horizontal"/>
+    <ImageView
+            android:layout_marginTop="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView" android:layout_gravity="center_horizontal" android:src="@drawable/ic_stub"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="长虹出品"
+            android:id="@+id/textView" android:layout_gravity="center_horizontal"/>
+</LinearLayout>
