@@ -23,14 +23,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
+import android.widget.SectionIndexer;
 
 /**
  * Adapter wrapper to insert extra views and otherwise hack around GridView to
  * add sections and headers.
- * 
+ *
  * @author Tonic Artos
  */
-public class StickyGridHeadersBaseAdapterWrapper extends BaseAdapter {
+public class StickyGridHeadersBaseAdapterWrapper extends BaseAdapter implements SectionIndexer {
+    String[] section;
+    int[] intsfor;
+    @Override
+    public Object[] getSections() {
+        return section;
+    }
+
+    @Override
+    public int getPositionForSection(int sectionIndex) {
+        int re=0;
+        for (int j = 0; j < sectionIndex; j++) {
+            re += intsfor[j]+ unFilledSpacesInHeaderGroup(j) + mNumColumns;
+        }
+        return re;
+    }
+
+    @Override
+    public int getSectionForPosition(int position) {
+        return 0;
+    }
+
     private static final int sNumViewTypes = 3;
 
     protected static final int ID_FILLER = -0x02;
@@ -77,12 +99,14 @@ public class StickyGridHeadersBaseAdapterWrapper extends BaseAdapter {
 
     private View mLastViewSeen;
 
-    private int mNumColumns = 1;
+    private int mNumColumns = 3;
 
     public StickyGridHeadersBaseAdapterWrapper(Context context, StickyGridHeadersGridView gridView,
-            StickyGridHeadersBaseAdapter delegate) {
+                                               StickyGridHeadersBaseAdapter delegate) {
         mContext = context;
         mDelegate = delegate;
+        section = ((StickyGridHeadersTimeAdapter) (mDelegate)).section;
+        intsfor = ((StickyGridHeadersTimeAdapter) (mDelegate)).intsfoeheader;
         mGridView = gridView;
         delegate.registerDataSetObserver(mDataSetObserver);
     }
@@ -121,9 +145,9 @@ public class StickyGridHeadersBaseAdapterWrapper extends BaseAdapter {
      * header and also spaces to insert headers into some positions will return
      * null.
      * </p>
-     * 
+     *
      * @param position Position of the item whose data we want within the
-     *            adapter's data set.
+     *                 adapter's data set.
      * @return The data at the specified position.
      */
     @Override
@@ -177,7 +201,7 @@ public class StickyGridHeadersBaseAdapterWrapper extends BaseAdapter {
         Position adapterPosition = translatePosition(position);
         if (adapterPosition.mPosition == POSITION_HEADER) {
             HeaderFillerView v = getHeaderFillerView(adapterPosition.mHeader, convertView, parent);
-            View view = mDelegate.getHeaderView(adapterPosition.mHeader, (View)v.getTag(), parent);
+            View view = mDelegate.getHeaderView(adapterPosition.mHeader, (View) v.getTag(), parent);
             mGridView.detachHeader((View) v.getTag());
             v.setTag(view);
             mGridView.attachHeader(view);
@@ -190,6 +214,7 @@ public class StickyGridHeadersBaseAdapterWrapper extends BaseAdapter {
         } else if (adapterPosition.mPosition == POSITION_FILLER) {
             convertView = getFillerView(convertView, parent, mLastViewSeen);
         } else {
+
             convertView = mDelegate.getView(adapterPosition.mPosition, convertView, parent);
             mLastViewSeen = convertView;
         }
@@ -249,7 +274,7 @@ public class StickyGridHeadersBaseAdapterWrapper extends BaseAdapter {
     }
 
     private FillerView getFillerView(View convertView, ViewGroup parent, View lastViewSeen) {
-        FillerView fillerView = (FillerView)convertView;
+        FillerView fillerView = (FillerView) convertView;
         if (fillerView == null) {
             fillerView = new FillerView(mContext);
         }
@@ -260,8 +285,8 @@ public class StickyGridHeadersBaseAdapterWrapper extends BaseAdapter {
     }
 
     private HeaderFillerView getHeaderFillerView(int headerPosition, View convertView,
-            ViewGroup parent) {
-        HeaderFillerView headerFillerView = (HeaderFillerView)convertView;
+                                                 ViewGroup parent) {
+        HeaderFillerView headerFillerView = (HeaderFillerView) convertView;
         if (headerFillerView == null) {
             headerFillerView = new HeaderFillerView(mContext);
         }
@@ -272,7 +297,7 @@ public class StickyGridHeadersBaseAdapterWrapper extends BaseAdapter {
     /**
      * Counts the number of items that would be need to fill out the last row in
      * the group of items with the given header.
-     * 
+     *
      * @param header Header set of items are grouped by.
      * @return The count of unfilled spaces in the last row.
      */
@@ -324,6 +349,7 @@ public class StickyGridHeadersBaseAdapterWrapper extends BaseAdapter {
             adapterPosition -= mNumColumns;
 
             if (place < sectionCount) {
+
                 return new Position(adapterPosition, i);
             }
 
@@ -359,7 +385,7 @@ public class StickyGridHeadersBaseAdapterWrapper extends BaseAdapter {
 
     /**
      * Simple view to fill space in grid view.
-     * 
+     *
      * @author Tonic Artos
      */
     protected class FillerView extends View {
@@ -392,7 +418,7 @@ public class StickyGridHeadersBaseAdapterWrapper extends BaseAdapter {
     /**
      * A view to hold the section header and measure the header row height
      * correctly.
-     * 
+     *
      * @author Tonic Artos
      */
     protected class HeaderFillerView extends FrameLayout {
@@ -428,7 +454,7 @@ public class StickyGridHeadersBaseAdapterWrapper extends BaseAdapter {
 
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            View v = (View)getTag();
+            View v = (View) getTag();
             ViewGroup.LayoutParams params = v.getLayoutParams();
             if (params == null) {
                 params = generateDefaultLayoutParams();
@@ -446,9 +472,6 @@ public class StickyGridHeadersBaseAdapterWrapper extends BaseAdapter {
         }
     }
 
-    protected class HeaderHolder {
-        protected View mHeaderView;
-    }
 
     protected class Position {
         protected int mHeader;

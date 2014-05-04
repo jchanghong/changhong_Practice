@@ -15,24 +15,26 @@ public class TimeImage extends Image implements Comparable<TimeImage>
 
         , Parcelable {
     public long mmakeTime = 0;
-
+    public String mytime=null;
     public TimeImage(long id, String displayTitle, String path,
                      String bucket_id, long mmakeTime) {
         super(id, displayTitle, path, bucket_id);
         this.mmakeTime = mmakeTime;
+        setMmakeTime();
     }
-
+    private void setMmakeTime() {
+        Date date = new Date(mmakeTime);
+        MyTime myTime1 = new MyTime(date.getYear() + 1900,
+                date.getMonth() + 1, date.getDay());
+        mytime= myTime1.toString();
+    }
     public String getMmakeTime() {
+        if (mytime!=null)return mytime;
         Date date = new Date(mmakeTime);
         MyTime myTime1 = new MyTime(date.getYear() + 1900,
                 date.getMonth() + 1, date.getDay());
         return myTime1.toString();
     }
-
-    public void setMmakeTime(long mmakeTime) {
-        this.mmakeTime = mmakeTime;
-    }
-
     @Override
     public int compareTo(TimeImage another) {
         if (mmakeTime == another.mmakeTime) return 0;

@@ -172,14 +172,12 @@ public class StickyGridHeadersGridView extends GridView implements OnScrollListe
 
     public StickyGridHeadersGridView(Context context) {
         this(context, null);
-        if (mScroller == null)
-            mScroller = new TimeIndexScroller(getContext(), this);
+
     }
 
     public StickyGridHeadersGridView(Context context, AttributeSet attrs) {
         this(context, attrs, android.R.attr.gridViewStyle);
-        if (mScroller == null)
-            mScroller = new TimeIndexScroller(getContext(), this);
+
     }
 
     public StickyGridHeadersGridView(Context context, AttributeSet attrs, int defStyle) {
@@ -192,7 +190,20 @@ public class StickyGridHeadersGridView extends GridView implements OnScrollListe
         if (!mNumColumnsSet) {
             mNumColumns = AUTO_FIT;
         }
+        if (mGestureDetector == null) {
+            mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
 
+                @Override
+                public boolean onFling(MotionEvent e1, MotionEvent e2,
+                                       float velocityX, float velocityY) {
+                    // If fling happens, index bar shows
+                    mScroller.show();
+
+                    return super.onFling(e1, e2, velocityX, velocityY);
+                }
+
+            });
+        }
         ViewConfiguration vc = ViewConfiguration.get(context);
         mTouchSlop = vc.getScaledTouchSlop();
     }
@@ -279,8 +290,6 @@ public class StickyGridHeadersGridView extends GridView implements OnScrollListe
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
             int totalItemCount) {
-//        if (firstVisibleItem>=1) ImageAlubumGirdActivity.menuDrawer.setTouchMode(MenuDrawer.TOUCH_MODE_NONE);
-//        if (firstVisibleItem==0)ImageAlubumGirdActivity.menuDrawer.setTouchMode(MenuDrawer.TOUCH_MODE_FULLSCREEN);
         if (mScrollListener != null) {
             mScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
         }
@@ -306,20 +315,7 @@ public class StickyGridHeadersGridView extends GridView implements OnScrollListe
         if (mScroller != null && mScroller.onTouchEvent(ev))
             return true;
 
-        if (mGestureDetector == null) {
-            mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
 
-                @Override
-                public boolean onFling(MotionEvent e1, MotionEvent e2,
-                                       float velocityX, float velocityY) {
-                    // If fling happens, index bar shows
-                    mScroller.show();
-
-                    return super.onFling(e1, e2, velocityX, velocityY);
-                }
-
-            });
-        }
         mGestureDetector.onTouchEvent(ev);
 
 //        return super.onTouchEvent(ev);
@@ -511,14 +507,15 @@ public class StickyGridHeadersGridView extends GridView implements OnScrollListe
             mClippingToPadding = true;
         }
 
-        StickyGridHeadersBaseAdapter baseAdapter;
-//        if (adapter instanceof StickyGridHeadersBaseAdapter) {
-//            baseAdapter = (StickyGridHeadersBaseAdapter)adapter;
-//        } else
+        StickyGridHeadersBaseAdapter baseAdapter=null;
+        if (adapter instanceof StickyGridHeadersBaseAdapter) {
+            baseAdapter = (StickyGridHeadersBaseAdapter)adapter;
+        }
+//        else
 //            if (adapter instanceof StickyGridHeadersSimpleAdapter) {
             // Wrap up simple adapter to auto-generate the data we need.
-            baseAdapter = new StickyGridHeadersSimpleAdapterWrapper(
-                    (StickyGridHeadersSimpleAdapter)adapter);
+//            baseAdapter = new StickyGridHeadersSimpleAdapterWrapper(
+//                    (StickyGridHeadersSimpleAdapter)adapter);
 //        } else {
             // Wrap up a list adapter so it is an adapter with zero headers.
 //            baseAdapter = new StickyGridHeadersListAdapterWrapper(adapter);

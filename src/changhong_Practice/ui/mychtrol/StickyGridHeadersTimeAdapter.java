@@ -17,33 +17,33 @@
 package changhong_Practice.ui.mychtrol;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 import changhong_Practice.changhong.R;
 import changhong_Practice.config.Constants;
 import changhong_Practice.image_loader.core.ImageLoader;
 import changhong_Practice.image_object.TimeImage;
-import changhong_Practice.ui.SingleImagePagerActivity;
-import changhong_Practice.uitl.MyTime;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
+/**
+ * Created by changhong on 14-3-30.
+ */
 public class StickyGridHeadersTimeAdapter extends BaseAdapter implements
-        StickyGridHeadersSimpleAdapter, SectionIndexer {
+        StickyGridHeadersBaseAdapter {
     ImageLoader imageLoader;
-    protected static final String TAG = StickyGridHeadersTimeAdapter.class.getSimpleName();
     Context context;
     private int mHeaderResId;
-
     private LayoutInflater mInflater;
-
     private int mItemResId;
-
     private List<TimeImage> mItems;
+    public int[] intsfoeheader;
 
     public StickyGridHeadersTimeAdapter(Context context, List<TimeImage> items
     ) {
@@ -51,11 +51,6 @@ public class StickyGridHeadersTimeAdapter extends BaseAdapter implements
         init(context, items);
     }
 
-    public StickyGridHeadersTimeAdapter(Context context, TimeImage[] items
-    ) {
-        this.context = context;
-        init(context, Arrays.asList(items));
-    }
 
     @Override
     public boolean areAllItemsEnabled() {
@@ -67,15 +62,25 @@ public class StickyGridHeadersTimeAdapter extends BaseAdapter implements
         return mItems.size();
     }
 
+//    @Override
+//    public long getHeaderId(int position) {
+//        Date date;
+//        TimeImage item = (TimeImage) getItem(position);
+//        String s = item.getMmakeTime();
+//        MyTime myTime = new MyTime(s);
+//        date = new Date(
+//                myTime.getYear(), myTime.getMouth(), myTime.getDay());
+//        return date.getTime();
+//    }
+
     @Override
-    public long getHeaderId(int position) {
-        Date date;
-        TimeImage item = (TimeImage) getItem(position);
-        String s = item.getMmakeTime();
-        MyTime myTime = new MyTime(s);
-        date = new Date(
-                myTime.getYear(), myTime.getMouth(), myTime.getDay());
-        return date.getTime();
+    public int getCountForHeader(int header) {
+        return intsfoeheader[header];
+    }
+
+    @Override
+    public int getNumHeaders() {
+        return intsfoeheader.length;
     }
 
     @Override
@@ -84,15 +89,13 @@ public class StickyGridHeadersTimeAdapter extends BaseAdapter implements
         HeaderViewHolder holder;
         if (convertView == null) {
             convertView = mInflater.inflate(mHeaderResId, parent, false);
-
             holder = new HeaderViewHolder();
             holder.textView = (TextView) convertView.findViewById(R.id.timetext);
             convertView.setTag(holder);
         } else {
             holder = (HeaderViewHolder) convertView.getTag();
         }
-        TimeImage item = (TimeImage) getItem(position);
-        holder.textView.setText(item.getMmakeTime());
+        holder.textView.setText(section[position]);
         return convertView;
     }
 
@@ -128,42 +131,34 @@ public class StickyGridHeadersTimeAdapter extends BaseAdapter implements
         this.mHeaderResId = R.layout.sticky_grid_header;
         this.mItemResId = R.layout.item_sticky_grid_item;
         mInflater = LayoutInflater.from(context);
-        imageLoader = ImageLoader.getInstance();
-        Set<String> set = new HashSet<String>();
-        for (TimeImage timeImage : items) {
-            set.add(timeImage.getMmakeTime());
-        }
-        section = new String[set.size()];
-        int i = 0;
-        for (String s : set) {
-            section[i++] = s;
-        }
-    }
-
-    String[] section;
-
-    @Override
-    public Object[] getSections() {
-        return section;
-    }
-
-    @Override
-    public int getPositionForSection(int sectionIndex) {
-        String time = section[sectionIndex];
-        int i = 0;
+        imageLoader = Constants.imageLoader;
+        Map<String, Integer> mapforHeadnumber = new TreeMap<String, Integer>();
         for (TimeImage timeImage : mItems) {
-            if (timeImage.getMmakeTime().equals(time)) {
-                return i;
+            if (mapforHeadnumber.keySet().contains(timeImage.getMmakeTime())) {
+                int num = mapforHeadnumber.get(timeImage.getMmakeTime());
+                num++;
+                mapforHeadnumber.put(timeImage.getMmakeTime(), num);
+            } else {
+                mapforHeadnumber.put(timeImage.getMmakeTime(), 1);
             }
+        }
+        section = new String[mapforHeadnumber.keySet().size()];
+        intsfoeheader = new int[mapforHeadnumber.entrySet().size()];
+        int i = 0;
+        for (Map.Entry<String, Integer> integerEntry : mapforHeadnumber.entrySet()) {
+            intsfoeheader[i] = integerEntry.getValue();
+            section[i] = integerEntry.getKey();
             i++;
         }
-        return 0;
     }
 
+    public String[] section;
+
     @Override
-    public int getSectionForPosition(int position) {
-        return 0;
+    public int getItemViewType(int position) {
+        return IGNORE_ITEM_VIEW_TYPE;
     }
+
 
     protected class HeaderViewHolder {
         public TextView textView;
@@ -176,28 +171,4 @@ public class StickyGridHeadersTimeAdapter extends BaseAdapter implements
     protected class ViewHolder {
         public ImageView imageView;
     }
-
-    public class onitemclicket implements AdapterView.OnItemClickListener {
-
-        List<String> images;
-
-        public void setImages(List<String> images) {
-            this.images = images;
-        }
-
-        onitemclicket(List<String> images) {
-            this.images = images;
-        }
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Intent intent = new Intent(context, SingleImagePagerActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putStringArrayList(Constants.Extra.IMAGES, (ArrayList<String>) images);
-            bundle.putInt(Constants.Extra.IMAGE_POSITION, position);
-            intent.putExtras(bundle);
-            context.startActivity(intent);
-        }
-    }
-
 }
